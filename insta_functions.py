@@ -45,15 +45,15 @@ class main_functions:
 
 
     @classmethod
-    def get_post_screencap(cls, count:int=0, purpose:str=''):
+    def get_screencap(cls, count:int=0, purpose:str=''):
         try:
             post = f'post_{count}.png'
             print(s.taking_screencap_msg)
-            if purpose == s.post_cap:
+            if purpose == s.scrcap_ppse_args.get('post_cap'):
                 process = subprocess.run(f'{s.take_post_screencap}{post}', stdout=subprocess.PIPE, shell=True)
                 time.sleep(.5)
 
-            elif purpose == s.analytics_cap:
+            elif purpose == s.scrcap_ppse_args.get('analytics_cap'):
                 process = subprocess.run(f'{s.take_analytics_screencap}{post}', stdout=subprocess.PIPE, shell=True)
                 time.sleep(.5)
 
@@ -65,19 +65,21 @@ class main_functions:
 
 
     @classmethod
-    def enter_post(cls, count:int):
+    def enter_post(cls, x_pos:int, y_pos:int):
         try:
+
+            ## if count is not equal to 2, then it means that the bot is still on the same row
+
             ## first it enters the post
             print(s.entering_post_msg)
-            
-            process = subprocess.run(f'{s.tap_phone}{s.posts_x_coordinates[count]}{s.first_row_Y_coordinates}', stdout=subprocess.PIPE, shell=True)
+            process = subprocess.run(f'{s.tap_phone}', stdout=subprocess.PIPE, shell=True)
             time.sleep(.5)
             ## Then takes a screencap
-            main_functions.get_post_screencap(count, s.post_cap)
-            post = f'post_{count}.png'
+            main_functions.get_screencap(count, s.scrcap_ppse_args.get('post_cap'))
+            post_file_name = f'post_{count}.png'
             ## Then it analizes if the 'View insights' button is present
-            insight_btn = img_text_detection.img_analize(img_name=post, type='post')
-            
+            insight_btn = img_text_detection.img_analize(img_name=post_file_name, type='post')
+                
             ## Then if it is indeed present, it will press it
             if insight_btn == True:
                 print(s.view_insights_msg)
@@ -86,7 +88,7 @@ class main_functions:
                 time.sleep(2)
                 
                 ## Once it presses it, it will take a screencap
-                main_functions.get_post_screencap(count, s.analytics_cap)
+                main_functions.get_screencap(count, s.scrcap_ppse_args.get('analytics_cap'))
                 print(s.exiting_post_analytics_msg)
                 ## And then go back
                 process = subprocess.run(f'{s.keycode_back}', stdout=subprocess.PIPE, shell=True)
@@ -148,16 +150,21 @@ class main_functions:
 
 
             ##And then we take a screencapture for relocation (To know later if we are where we want to be)
-            main_functions.get_post_screencap(0, s.relocation_cap)
+            main_functions.get_post_screencap(0, s.scrcap_ppse_args.get('relocation_cap'))
             time.sleep(.5)
 
 
-            row_count = [0, 1, 2]
-            for c in row_count: 
 
-                print(c)
-                main_functions.enter_post(c)
-                # if c == 2:
+            x_position = s.posts_x_start_coordinates
+            y_position = s.posts_y_start_coordinates
+
+            for count in range(3): 
+                if count != 3:
+
+                    main_functions.enter_post(x_post=x_position, y_pos=y_position)
+                    x = lambda x_position : x_position + (x_position * 2)
+
+
 
 
             

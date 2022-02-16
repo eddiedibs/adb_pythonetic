@@ -51,22 +51,19 @@ take_analytics_screencap = f'adb exec-out screencap -p > {screen_analytics_path}
 
 
 #### screencap Purpose args  ####
-
-post_cap = 'post_cap'
-analytics_cap = 'analytics_cap'
-relocation_cap = 'relocation_cap'
-
+scrcap_ppse_args = {
+    'post_cap': 'post_cap',
+    'analytics_cap': 'analytics_cap',
+    'relocation_cap': 'relocation_cap'
+}
 
 
 ### COORDINATE PARAMS ###
 
-first_post_X_coordinates = '180 '
-second_post_X_coordinates = '379 '
-third_post_X_coordinates = '752 '
 
-posts_x_coordinates = [first_post_X_coordinates, second_post_X_coordinates, third_post_X_coordinates]
+posts_x_start_coordinates = 180
+posts_y_start_coordinates = 480
 
-first_row_Y_coordinates = ' 583'
 
 profile_btn_coordinates = '995 2209'
 
